@@ -1,5 +1,14 @@
+From 759f620efec1474502b2035b5bfe14eef2aad35c Mon Sep 17 00:00:00 2001
+From: Ciaran O' Rourke <ciaranborourke-dev@proton.me>
+Date: Fri, 5 Jul 2024 18:31:39 -0700
+Subject: [PATCH 4/4] remove unsupported xnnpack features
+
+---
+ .../lite/delegates/xnnpack/xnnpack_delegate.cc | 18 ------------------
+ 1 file changed, 18 deletions(-)
+
 diff --git a/tensorflow/lite/delegates/xnnpack/xnnpack_delegate.cc b/tensorflow/lite/delegates/xnnpack/xnnpack_delegate.cc
-index 70252bf3..730e522d 100644
+index 70252bf3..9048f97b 100644
 --- a/tensorflow/lite/delegates/xnnpack/xnnpack_delegate.cc
 +++ b/tensorflow/lite/delegates/xnnpack/xnnpack_delegate.cc
 @@ -30,7 +30,6 @@ limitations under the License.
@@ -31,7 +40,7 @@ index 70252bf3..730e522d 100644
      if (delegate.force_fp16()) {
        flags |= XNN_FLAG_FORCE_FP16_INFERENCE;
      } else {
-@@ -3148,17 +3140,6 @@ class Subgraph {
+@@ -3148,16 +3140,6 @@ class Subgraph {
              /*input4_id=*/input_output_tensors.at(node->inputs->data[3]),
              /*output_id=*/input_output_tensors.at(node->outputs->data[0]),
              /*flags=*/0);
@@ -45,7 +54,6 @@ index 70252bf3..730e522d 100644
 -            /*input5_id=*/input_output_tensors.at(node->inputs->data[4]),
 -            /*output_id=*/input_output_tensors.at(node->outputs->data[0]),
 -            /*flags=*/0);
--      }
+       }
        if (status != xnn_status_success) {
          TF_LITE_KERNEL_LOG(
-             logging_context, "failed to delegate %s node #%d",
