@@ -98,7 +98,11 @@ class TensorflowLiteConan(ConanFile):
         if self.options.with_xnnpack or self.options.get_safe("with_nnapi", False):
             self.requires("fp16/cci.20210320")
         if self.options.with_gpu:
-            self.requires("egl-headers/cci.20220525")
+            self.requires("opencl-headers/2023.12.14")
+            self.requires("vulkan-headers/1.3.268.0")
+            if self.settings.os != "Android":
+                self.requires("opengl/system")
+                self.requires("egl-headers/cci.20220525")
         if self._needs_fxdiv:
             self.requires("fxdiv/cci.20200417")
 
