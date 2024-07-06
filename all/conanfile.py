@@ -28,6 +28,7 @@ class TensorflowLiteConan(ConanFile):
         "with_nnapi": [True, False],
         "with_mmap": [True, False],
         "with_xnnpack": [True, False],
+        "with_gpu": [True, False],
     }
     default_options = {
         "shared": False,
@@ -35,7 +36,8 @@ class TensorflowLiteConan(ConanFile):
         "with_ruy": False,
         "with_nnapi": False,
         "with_mmap": True,
-        "with_xnnpack": True
+        "with_xnnpack": True,
+        "with_gpu": True,
     }
 
     short_paths = True
@@ -92,6 +94,8 @@ class TensorflowLiteConan(ConanFile):
             self.requires("pthreadpool/cci.20231129")
         if self.options.with_xnnpack or self.options.get_safe("with_nnapi", False):
             self.requires("fp16/cci.20210320")
+        if self.options.with_gpu:
+            self.requires("egl-headers/cci.20220525")
         if self._needs_fxdiv:
             self.requires("fxdiv/cci.20200417")
 
@@ -119,7 +123,7 @@ class TensorflowLiteConan(ConanFile):
             "CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS": True,
             "TFLITE_ENABLE_RUY": self.options.with_ruy,
             "TFLITE_ENABLE_NNAPI": self.options.get_safe("with_nnapi", False),
-            "TFLITE_ENABLE_GPU": False,
+            "TFLITE_ENABLE_GPU": self.options.with_gpu,
             "TFLITE_ENABLE_XNNPACK": self.options.with_xnnpack,
             "TFLITE_ENABLE_MMAP": self.options.get_safe("with_mmap", False),
             "FETCHCONTENT_FULLY_DISCONNECTED": True,
