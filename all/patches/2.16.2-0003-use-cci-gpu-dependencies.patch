@@ -1,0 +1,32 @@
+diff --git a/tensorflow/lite/CMakeLists.txt b/tensorflow/lite/CMakeLists.txt
+index 60017a5d..f037549b 100644
+--- a/tensorflow/lite/CMakeLists.txt
++++ b/tensorflow/lite/CMakeLists.txt
+@@ -271,13 +271,13 @@ populate_tflite_source_vars("core/tools" TFLITE_CORE_TOOLS_SRCS)
+ populate_tflite_source_vars("c" TFLITE_C_SRCS)
+ populate_tflite_source_vars("delegates" TFLITE_DELEGATES_SRCS)
+ if(TFLITE_ENABLE_GPU)
+-  find_package(opencl_headers REQUIRED)
+-  find_package(vulkan_headers REQUIRED)
++  find_package(OpenCLHeaders REQUIRED)
++  find_package(VulkanHeaders REQUIRED)
+   find_package(fp16_headers REQUIRED)
+   # Android NDK already has OpenGL, EGL headers.
+   if(NOT "${CMAKE_SYSTEM_NAME}" STREQUAL "Android")
+-    find_package(opengl_headers REQUIRED)
+-    find_package(egl_headers REQUIRED)
++    find_package(OpenGL REQUIRED)
++    find_package(egl-headers REQUIRED)
+   endif()
+   populate_tflite_source_vars(
+     "delegates/gpu/cl" TFLITE_DELEGATES_GPU_CL_SRCS
+@@ -358,6 +358,9 @@ if(TFLITE_ENABLE_GPU)
+     ${TFLITE_SOURCE_DIR}/delegates/gpu/common
+     ${TFLITE_SOURCE_DIR}/delegates/gpu/common/task
+   )
++  list(APPEND TFLITE_TARGET_DEPENDENCIES
++    OpenCL::Headers
++  )
+   if(TFLITE_ENABLE_METAL AND "${CMAKE_SYSTEM_NAME}" STREQUAL "Darwin")
+     #
+     # libmetal_delegate library
