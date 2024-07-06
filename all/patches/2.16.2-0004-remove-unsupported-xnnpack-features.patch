@@ -1,0 +1,51 @@
+diff --git a/tensorflow/lite/delegates/xnnpack/xnnpack_delegate.cc b/tensorflow/lite/delegates/xnnpack/xnnpack_delegate.cc
+index 70252bf3..730e522d 100644
+--- a/tensorflow/lite/delegates/xnnpack/xnnpack_delegate.cc
++++ b/tensorflow/lite/delegates/xnnpack/xnnpack_delegate.cc
+@@ -30,7 +30,6 @@ limitations under the License.
+ #include <utility>
+ #include <vector>
+ 
+-#include "experiments-config.h"  // from @XNNPACK
+ #include "xnnpack.h"  // from @XNNPACK
+ #include "tensorflow/lite/builtin_ops.h"
+ #include "tensorflow/lite/core/api/profiler.h"
+@@ -561,10 +560,6 @@ class Delegate {
+             TFLITE_XNNPACK_DELEGATE_FLAG_TRANSIENT_INDIRECTION_BUFFER) != 0;
+   }
+ 
+-  bool experimental_adaptive_avx_optimization() const {
+-    return options_.experimental_adaptive_avx_optimization;
+-  }
+-
+   pthreadpool_t threadpool() const {
+ #if defined(__EMSCRIPTEN__) && !defined(__EMSCRIPTEN_PTHREADS__)
+     return nullptr;
+@@ -1027,9 +1022,6 @@ class Subgraph {
+     if (delegate.transient_indirection_buffer()) {
+       flags |= XNN_FLAG_TRANSIENT_INDIRECTION_BUFFER;
+     }
+-    if (delegate.experimental_adaptive_avx_optimization()) {
+-      xnn_experiment_enable_adaptive_avx_optimization();
+-    }
+     if (delegate.force_fp16()) {
+       flags |= XNN_FLAG_FORCE_FP16_INFERENCE;
+     } else {
+@@ -3148,17 +3140,6 @@ class Subgraph {
+             /*input4_id=*/input_output_tensors.at(node->inputs->data[3]),
+             /*output_id=*/input_output_tensors.at(node->outputs->data[0]),
+             /*flags=*/0);
+-      } else if (num_inputs == 5) {
+-        status = xnn_define_concatenate5(
+-            subgraph, axis,
+-            /*input1_id=*/input_output_tensors.at(node->inputs->data[0]),
+-            /*input2_id=*/input_output_tensors.at(node->inputs->data[1]),
+-            /*input3_id=*/input_output_tensors.at(node->inputs->data[2]),
+-            /*input4_id=*/input_output_tensors.at(node->inputs->data[3]),
+-            /*input5_id=*/input_output_tensors.at(node->inputs->data[4]),
+-            /*output_id=*/input_output_tensors.at(node->outputs->data[0]),
+-            /*flags=*/0);
+-      }
+       if (status != xnn_status_success) {
+         TF_LITE_KERNEL_LOG(
+             logging_context, "failed to delegate %s node #%d",
