@@ -35,6 +35,9 @@ patches:
     - patch_file: "patches/2.12.0-0004-use-cci-gpu-dependencies.patch"
       patch_description: "Dependency compatibility: Patch CMakeLists.txt, updating package names, target names, etc for gpu support"
       patch_type: "conan"
+    - patch_file: "patches/2.12.0-0005-add-missing-cstdint.patch"
+      patch_description: "internal/spectrogram.cc missing cstdint header"
+      patch_type: "conan"
   "2.10.0":
     - patch_file: "patches/2.10.0-0001-remove_simple_memory_arena_debug_dump.patch"
       patch_description: "Shared build fails on Windows with error LNK2005. Resolve the conflict by removing the conflicting implementation for now."
