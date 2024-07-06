@@ -1,8 +1,8 @@
 diff --git a/tensorflow/lite/CMakeLists.txt b/tensorflow/lite/CMakeLists.txt
-index 60017a5d..f037549b 100644
+index 89224d33..ba5563e9 100644
 --- a/tensorflow/lite/CMakeLists.txt
 +++ b/tensorflow/lite/CMakeLists.txt
-@@ -271,13 +271,13 @@ populate_tflite_source_vars("core/tools" TFLITE_CORE_TOOLS_SRCS)
+@@ -270,13 +270,13 @@ populate_tflite_source_vars("core/tools" TFLITE_CORE_TOOLS_SRCS)
  populate_tflite_source_vars("c" TFLITE_C_SRCS)
  populate_tflite_source_vars("delegates" TFLITE_DELEGATES_SRCS)
  if(TFLITE_ENABLE_GPU)
@@ -20,7 +20,7 @@ index 60017a5d..f037549b 100644
    endif()
    populate_tflite_source_vars(
      "delegates/gpu/cl" TFLITE_DELEGATES_GPU_CL_SRCS
-@@ -358,6 +358,9 @@ if(TFLITE_ENABLE_GPU)
+@@ -357,6 +357,9 @@ if(TFLITE_ENABLE_GPU)
      ${TFLITE_SOURCE_DIR}/delegates/gpu/common
      ${TFLITE_SOURCE_DIR}/delegates/gpu/common/task
    )

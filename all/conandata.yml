@@ -9,6 +9,19 @@ sources:
     url: "https://github.com/tensorflow/tensorflow/archive/refs/tags/v2.10.0.tar.gz"
     sha256: "b5a1bb04c84b6fe1538377e5a1f649bb5d5f0b2e3625a3c526ff3a8af88633e8"
 patches:
+  "2.16.2":
+    - patch_file: "patches/2.16.2-0001-disable-fetch-content.patch"
+      patch_description: "Fail if the CMake build script tries to fetch external dependencies"
+      patch_type: "conan"
+    - patch_file: "patches/2.16.2-0002-use-cci-dependencies.patch"
+      patch_description: "Dependency compatibility: Patch CMakeLists.txt, updating package names, target names, etc"
+      patch_type: "conan"
+    - patch_file: "patches/2.16.2-0003-use-cci-gpu-dependencies.patch"
+      patch_description: "Dependency compatibility: Patch CMakeLists.txt, updating package names, target names, etc for gpu support"
+      patch_type: "conan"
+    - patch_file: "patches/2.16.2-0004-remove-unsupported-xnnpack-features.patch"
+      patch_description: "Dependency compatibility: Remove unsupported xnnpack features"
+      patch_type: "conan"
   "2.12.0":
     - patch_file: "patches/2.12.0-0001-remove_simple_memory_arena_debug_dump.patch"
       patch_description: "Shared build fails on Windows with error LNK2005. Resolve the conflict by removing the conflicting implementation for now."
