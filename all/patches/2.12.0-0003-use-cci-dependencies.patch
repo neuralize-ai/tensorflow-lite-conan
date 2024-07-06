@@ -1,5 +1,5 @@
 diff --git a/tensorflow/lite/CMakeLists.txt b/tensorflow/lite/CMakeLists.txt
-index 24b8265..d95c0ae 100644
+index 7260efe1..f22a3a8c 100644
 --- a/tensorflow/lite/CMakeLists.txt
 +++ b/tensorflow/lite/CMakeLists.txt
 @@ -142,31 +142,17 @@ endmacro()
@@ -64,7 +64,7 @@ index 24b8265..d95c0ae 100644
    )
    list(APPEND TFLITE_TARGET_DEPENDENCIES
 -    XNNPACK
-+    xnnpack::xnnpack    
++    xnnpack::xnnpack
    )
    list(APPEND TFLITE_TARGET_PUBLIC_OPTIONS "-DTFLITE_BUILD_WITH_XNNPACK_DELEGATE")
  endif()
@@ -72,7 +72,7 @@ index 24b8265..d95c0ae 100644
    TFLITE_KERNEL_INTERNAL_REF_SPARSE_OPS_SRCS
  )
  set(TFLITE_PROFILER_SRCS
-+${TFLITE_SOURCE_DIR}/profiling/telemetry/telemetry.cc
++  ${TFLITE_SOURCE_DIR}/profiling/telemetry/telemetry.cc
    ${TFLITE_SOURCE_DIR}/profiling/platform_profiler.cc
    ${TFLITE_SOURCE_DIR}/profiling/root_profiler.h
    ${TFLITE_SOURCE_DIR}/profiling/root_profiler.cc
