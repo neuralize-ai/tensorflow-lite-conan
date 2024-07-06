@@ -1,8 +1,8 @@
 diff --git a/tensorflow/lite/CMakeLists.txt b/tensorflow/lite/CMakeLists.txt
-index 89224d33..ba5563e9 100644
+index 89224d33..a25ddf29 100644
 --- a/tensorflow/lite/CMakeLists.txt
 +++ b/tensorflow/lite/CMakeLists.txt
-@@ -270,13 +270,13 @@ populate_tflite_source_vars("core/tools" TFLITE_CORE_TOOLS_SRCS)
+@@ -270,13 +270,16 @@ populate_tflite_source_vars("core/tools" TFLITE_CORE_TOOLS_SRCS)
  populate_tflite_source_vars("c" TFLITE_C_SRCS)
  populate_tflite_source_vars("delegates" TFLITE_DELEGATES_SRCS)
  if(TFLITE_ENABLE_GPU)
@@ -17,15 +17,19 @@ index 89224d33..ba5563e9 100644
 -    find_package(egl_headers REQUIRED)
 +    find_package(OpenGL REQUIRED)
 +    find_package(egl-headers REQUIRED)
++    list(APPEND TFLITE_TARGET_DEPENDENCIES
++        egl-headers::egl-headers
++    )
    endif()
    populate_tflite_source_vars(
      "delegates/gpu/cl" TFLITE_DELEGATES_GPU_CL_SRCS
-@@ -357,6 +357,9 @@ if(TFLITE_ENABLE_GPU)
+@@ -357,6 +360,10 @@ if(TFLITE_ENABLE_GPU)
      ${TFLITE_SOURCE_DIR}/delegates/gpu/common
      ${TFLITE_SOURCE_DIR}/delegates/gpu/common/task
    )
 +  list(APPEND TFLITE_TARGET_DEPENDENCIES
 +    OpenCL::Headers
++    vulkan-headers::vulkan-headers
 +  )
    if(TFLITE_ENABLE_METAL AND "${CMAKE_SYSTEM_NAME}" STREQUAL "Darwin")
      #
