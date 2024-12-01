@@ -3,7 +3,13 @@ from conan.errors import ConanInvalidConfiguration
 from conan.tools.build import check_min_cppstd
 from conan.tools.cmake import CMake, CMakeToolchain, CMakeDeps, cmake_layout
 from conan.tools.env import VirtualBuildEnv
-from conan.tools.files import get, save, copy, export_conandata_patches, apply_conandata_patches
+from conan.tools.files import (
+    get,
+    save,
+    copy,
+    export_conandata_patches,
+    apply_conandata_patches,
+)
 from conan.tools.scm import Version
 from os.path import join
 import textwrap
@@ -16,8 +22,10 @@ class TensorflowLiteConan(ConanFile):
     license = "Apache-2.0"
     homepage = "https://www.tensorflow.org/lite/guide"
     url = "https://github.com/conan-io/conan-center-index"
-    description = ("TensorFlow Lite is a set of tools that enables on-device machine learning "
-                   "by helping developers run their models on mobile, embedded, and IoT devices.")
+    description = (
+        "TensorFlow Lite is a set of tools that enables on-device machine learning "
+        "by helping developers run their models on mobile, embedded, and IoT devices."
+    )
     topics = ("machine-learning", "neural-networks", "deep-learning")
     package_type = "library"
     settings = "os", "arch", "compiler", "build_type"
@@ -37,7 +45,7 @@ class TensorflowLiteConan(ConanFile):
         "with_nnapi": False,
         "with_mmap": True,
         "with_xnnpack": True,
-        "with_gpu": True,
+        "with_gpu": False,
     }
 
     short_paths = True
@@ -110,8 +118,13 @@ class TensorflowLiteConan(ConanFile):
         if self.settings.get_safe("compiler.cppstd"):
             check_min_cppstd(self, self._min_cppstd)
 
-        minimum_version = self._compilers_minimum_version.get(str(self.settings.compiler), False)
-        if minimum_version and Version(self.settings.compiler.version) < minimum_version:
+        minimum_version = self._compilers_minimum_version.get(
+            str(self.settings.compiler), False
+        )
+        if (
+            minimum_version
+            and Version(self.settings.compiler.version) < minimum_version
+        ):
             raise ConanInvalidConfiguration(
                 f"{self.ref} requires C++{self._min_cppstd}, which your compiler does not support."
             )
@@ -126,16 +139,18 @@ class TensorflowLiteConan(ConanFile):
         env = VirtualBuildEnv(self)
         env.generate()
         tc = CMakeToolchain(self)
-        tc.variables.update({
-            "CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS": True,
-            "TFLITE_ENABLE_RUY": self.options.with_ruy,
-            "TFLITE_ENABLE_NNAPI": self.options.get_safe("with_nnapi", False),
-            "TFLITE_ENABLE_GPU": self.options.with_gpu,
-            "TFLITE_ENABLE_XNNPACK": self.options.with_xnnpack,
-            "TFLITE_ENABLE_MMAP": self.options.get_safe("with_mmap", False),
-            "FETCHCONTENT_FULLY_DISCONNECTED": True,
-            "clog_POPULATED": True,
-        })
+        tc.variables.update(
+            {
+                "CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS": True,
+                "TFLITE_ENABLE_RUY": self.options.with_ruy,
+                "TFLITE_ENABLE_NNAPI": self.options.get_safe("with_nnapi", False),
+                "TFLITE_ENABLE_GPU": self.options.with_gpu,
+                "TFLITE_ENABLE_XNNPACK": self.options.with_xnnpack,
+                "TFLITE_ENABLE_MMAP": self.options.get_safe("with_mmap", False),
+                "FETCHCONTENT_FULLY_DISCONNECTED": True,
+                "clog_POPULATED": True,
+            }
+        )
         if self.settings.arch == "armv8":
             # Not defined by Conan for Apple Silicon. See https://github.com/conan-io/conan/pull/8026
             tc.variables["CMAKE_SYSTEM_PROCESSOR"] = "arm64"
@@ -167,14 +182,38 @@ class TensorflowLiteConan(ConanFile):
 
     def package(self):
         copy(self, "LICENSE", self.source_folder, join(self.package_folder, "licenses"))
-        copy(self, "*.h", join(self.source_folder, "tensorflow", "lite"), join(self.package_folder, "include", "tensorflow", "lite"))
-        copy(self, "version.h", join(self.source_folder, "tensorflow", "core", "public"), join(self.package_folder, "include", "tensorflow", "core", "public"))
+        copy(
+            self,
+            "*.h",
+            join(self.source_folder, "tensorflow", "lite"),
+            join(self.package_folder, "include", "tensorflow", "lite"),
+        )
+        copy(
+            self,
+            "version.h",
+            join(self.source_folder, "tensorflow", "core", "public"),
+            join(self.package_folder, "include", "tensorflow", "core", "public"),
+        )
         copy(self, "*.a", self.build_folder, join(self.package_folder, "lib"))
         copy(self, "*.so", self.build_folder, join(self.package_folder, "lib"))
         copy(self, "*.dylib", self.build_folder, join(self.package_folder, "lib"))
-        copy(self, "*.lib", self.build_folder, join(self.package_folder, "lib"), keep_path=False)
-        copy(self, "*.dll", self.build_folder, join(self.package_folder, "bin"), keep_path=False)
-        self._create_cmake_module_alias_target(self, join(self.package_folder, self._module_file))
+        copy(
+            self,
+            "*.lib",
+            self.build_folder,
+            join(self.package_folder, "lib"),
+            keep_path=False,
+        )
+        copy(
+            self,
+            "*.dll",
+            self.build_folder,
+            join(self.package_folder, "bin"),
+            keep_path=False,
+        )
+        self._create_cmake_module_alias_target(
+            self, join(self.package_folder, self._module_file)
+        )
 
     def package_info(self):
         self.cpp_info.set_property("cmake_file_name", "tensorflowlite")
